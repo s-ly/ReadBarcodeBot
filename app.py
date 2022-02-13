@@ -3,6 +3,7 @@
 
 from aiogram import Bot, Dispatcher, executor, types  # основной aiogram
 import tokens  # содержит токен (имя 'token' нельзя использовать)
+import func    # мой модуль, функции
 
 
 ###################################################################################################
@@ -14,7 +15,7 @@ import tokens  # содержит токен (имя 'token' нельзя исп
 # При разработке использеум test, для работы readBarcodeBot.
 # в git его игнорируем, а в место пушим зашифрованный архив.
 API_TOKEN = tokens.readBarcodeBot_token # рабочий бот
-# API_TOKEN = test_token # тестовый бот
+# API_TOKEN = tokens.test_token # тестовый бот
 
 
 # Инициализация бота
@@ -29,8 +30,17 @@ dp = Dispatcher(bot)
 ###################################################################################################
 @dp.message_handler()
 async def send_welcome(message: types.Message):
-    """Отвечает на любые сообщения."""
-    await message.answer('Привет')
+    """Отвечает на любые текстовые сообщения."""
+    await message.answer('Отправь мне фотку со штрих-кодом.')
+
+
+@dp.message_handler(content_types=['photo'])
+async def send_welcome(message: types.Message):
+    """Отвечает на любые фото сообщения."""
+    await message.answer('Сейчас попробую распознать.')
+    await message.photo[-1].download('img.jpg')
+    mes = func.img_decode()
+    await message.answer(mes)
 ###################################################################################################
 
 
