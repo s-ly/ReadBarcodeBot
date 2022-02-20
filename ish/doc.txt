@@ -1,0 +1,1 @@
+Для запуска на Ubuntu понадобилось: apt-get install zbar-tools
